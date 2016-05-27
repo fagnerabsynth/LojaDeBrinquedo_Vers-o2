@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 
+import Conn.Database;
+import Models.CategoriaMOD;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -34,16 +37,30 @@ public class Catalogo extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        }
+ 
 
-        
         try (PrintWriter out = response.getWriter()) {
-            out.println("<address>Você esta em: <b><a href='Javascript:Void(0)' class='btn-" + request.getParameter("cor") + " btn-link' onclick='pagina(\"" + request.getServletPath().replace('/', ' ') + "\")'>" + request.getServletPath().replace('/', ' ') + "</a></b> </address>");
+            out.println("<address>Você esta em: <b><a href='Javascript:Void(0)'  onclick='pagina(\"" + request.getServletPath().replace('/', ' ') + "\")'>" + request.getServletPath().replace('/', ' ') + "</a></b> </address>");
 
+            Database c = new Database();
+            ArrayList<CategoriaMOD> cat = c.selectCategoria();
+
+            if (cat.size() > 0) {
+
+                for (CategoriaMOD dados : cat) {
+                    out.println("<div class=\"col-sm-4 col-sm-offset-1\" style=\"box-shadow: 2px 2px 2px #d1d1d1;border-radius:5px;padding:10px;cursor:pointer\" onclick=\"abreCategoria('" + dados.categoria + "')\">"
+                            + "<center>");
+                    out.println("<img class='img-reponsive img-circle' width='200' height='200' src=\"" + dados.imagem + "\">");
+                    out.println("<h3 style=\"color:red\">" + dados.categoria + "</h3>");
+                    out.println((dados.itens == 1) ? "Um item" : dados.itens + " itens");
+                    out.println("</center>"
+                            + "</div>");
+
+                }
+
+            }
+
+            out.close();
         }
     }
 

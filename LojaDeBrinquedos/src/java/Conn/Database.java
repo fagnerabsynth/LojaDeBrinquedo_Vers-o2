@@ -39,7 +39,6 @@ public class Database extends ConnectionFactory {
     public Database() {
         mysql = getConnection();
 
-        
         try {
             conexao = mysql.createStatement();
         } catch (SQLException ex) {
@@ -54,6 +53,33 @@ public class Database extends ConnectionFactory {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public ArrayList<BrinquedoMOD> selectRand() {
+        String query = "select * from brinquedos order by rand() limit 0,4";
+        ArrayList<BrinquedoMOD> b = new ArrayList<>();
+
+        ResultSet resultado;
+        try {
+            resultado = conexao.executeQuery(query);
+            BrinquedoMOD temp;
+            while (resultado.next()) {
+                temp = new BrinquedoMOD();
+                temp.categoria = resultado.getString("categoria");
+                temp.codigo = resultado.getInt("codigo");
+                temp.preco = resultado.getDouble("preco");
+                temp.descricao = resultado.getString("descricao");
+                temp.detalhe = resultado.getString("detalhe");
+                temp.imagem = resultado.getString("imagem");
+                temp.marca = resultado.getString("marca");
+                b.add(temp);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return b;
+
     }
 
     //pega todos os brinquedos inseridos no banco
@@ -114,7 +140,7 @@ public class Database extends ConnectionFactory {
 
         return b;
     }
-    
+
     ///Faz a pesquisa pelo modelo categora e retorna todos os produtos... para a lista de pesquisa... 
     public ArrayList<BrinquedoMOD> select(CategoriaMOD i) {
 
@@ -144,9 +170,6 @@ public class Database extends ConnectionFactory {
         return b;
     }
 
-    
-    
-    
     ///Faz a pesquisa pelo código id...um numero inteiro... para edição do arquivo
     public BrinquedoMOD select(BrinquedoMOD i) {
 
@@ -173,11 +196,10 @@ public class Database extends ConnectionFactory {
         return b;
     }
 
-    
     //seleciona e agrupa todas as categorias e retorna a quantidade de itens nela
     public ArrayList<CategoriaMOD> selectCategoria() {
         ArrayList<CategoriaMOD> b = new ArrayList();
-        String query = "SELECT categoria,sum(1) as itens FROM brinquedos group by categoria order by categoria asc";
+        String query = "SELECT imagem,categoria,sum(1) as itens FROM brinquedos group by categoria order by categoria asc";
         ResultSet resultado;
         try {
             resultado = conexao.executeQuery(query);
@@ -185,6 +207,8 @@ public class Database extends ConnectionFactory {
             while (resultado.next()) {
                 temp = new CategoriaMOD();
                 temp.categoria = resultado.getString("categoria");
+                temp.imagem = resultado.getString("imagem");
+
                 temp.itens = resultado.getInt("itens");
                 b.add(temp);
             }
@@ -202,7 +226,7 @@ public class Database extends ConnectionFactory {
                 + "detalhe = '" + mysql_real_escape_string(b.detalhe) + "',"
                 + "marca = '" + mysql_real_escape_string(b.marca) + "',"
                 + "imagem = '" + mysql_real_escape_string(b.imagem) + "',"
-                + "preco = '" + b.preco + "',"
+                + "preco = '" + b.preco + "' "
                 + "  where codigo = '" + b.codigo + "'";
 
         boolean retorno = false;
@@ -241,7 +265,7 @@ public class Database extends ConnectionFactory {
                 + "  where codigo ='" + b.codigo + "'";
         boolean retorno = false;
         try {
-            mysql.prepareStatement(query).execute();
+            mysql.createStatement().executeUpdate(query);
             retorno = true;
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);

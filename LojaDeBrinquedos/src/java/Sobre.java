@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 
+import Models.AlunosMOD;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -13,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 
 /**
  *
@@ -34,15 +38,56 @@ public class Sobre extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ArrayList<AlunosMOD> alunos = new ArrayList<>();
+        AlunosMOD x = new AlunosMOD();
+        x.rgm = 14026201;
+        x.nome = "Ricardo Fagner Castelo Branco";
+        x.foto = "fagner.jpg";
+        alunos.add(x);
 
+        x = new AlunosMOD();
+        x.rgm = 15738558;
+        x.nome = "Leandro Silva de Oliveira";
+        x.foto = "leandro.jpg";
+        alunos.add(x);
+
+        x = new AlunosMOD();
+        x.rgm = 14037114;
+        x.nome = "Gabriel Pires da Silva";
+        x.foto = "gabriel.jpg";
+        alunos.add(x);
+
+        x = new AlunosMOD();
+        x.rgm = 14022133;
+        x.nome = "Renan Ribeiro Pereira";
+        x.foto = "renan.jpg";
+        alunos.add(x);
+
+        x = new AlunosMOD();
+        x.rgm = 14020670;
+        x.nome = "Kelwin Miranda";
+        x.foto = "kelwin.jpg";
+        alunos.add(x);
         
+        x = new AlunosMOD();
+        x.rgm = 14019302;
+        x.nome = "Eduardo de Souza Santos";
+        x.foto = "eduardo.jpg";
+        alunos.add(x);
+
         try (PrintWriter out = response.getWriter()) {
-            out.println("<address>Você esta em: <b><a href='Javascript:Void(0)' class='btn-" + request.getParameter("cor") + " btn-link' onclick='pagina(\"" + request.getServletPath().replace('/', ' ') + "\")'>" + request.getServletPath().replace('/', ' ') + "</a></b> </address>");
+            out.println("<address>Você esta em: <b><a href='Javascript:Void(0)'  onclick='pagina(\"" + request.getServletPath().replace('/', ' ') + "\")'>" + request.getServletPath().replace('/', ' ') + "</a></b> </address>");
+            Collections.shuffle(alunos);
+            for (AlunosMOD aluno : alunos) {
+                out.println("<div class=\"col-sm-4 col-sm-offset-1\" style=\"box-shadow: 2px 2px 2px #d1d1d1;border-radius:5px;padding:10px;\" >"
+                        + "<center>");
+                out.println("<img class='img-reponsive img-circle' width='200' height='200' src=\"imagens/" + aluno.foto + "\">");
+                out.println("<h3 style=\"color:red\">" + aluno.nome + "</h3>");
+                out.println("RGM: " + aluno.rgm);
+                out.println("</center>"
+                        + "</div>");
+
+            }
 
         }
     }

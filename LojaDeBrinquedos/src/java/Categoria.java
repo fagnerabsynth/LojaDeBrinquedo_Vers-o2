@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Fagner
  */
-@WebServlet(urlPatterns = {"/Home"})
-public class Home extends HttpServlet {
+@WebServlet(urlPatterns = {"/Categoria"})
+public class Categoria extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,25 +38,24 @@ public class Home extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        ArrayList<BrinquedoMOD> b = new ArrayList<>();
-
+        CategoriaMOD ca = new CategoriaMOD();
         try {
-            Database c = new Database();
-            b = c.selectRand();
-
+            ca.categoria = request.getParameter("categoria");
         } catch (Exception ex) {
             Logger.getLogger(Administracao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try (PrintWriter out = response.getWriter()) {
-            out.println("<address>Você esta em: <b><a href='Javascript:Void(0)'  onclick='pagina(\"" + request.getServletPath().replace('/', ' ') + "\")'>" + request.getServletPath().replace('/', ' ') + "</a></b> </address>");
 
-            out.println("<h2>Brinquedos em destaque!</h2><br />");
+            out.println("<address>Você esta em: <b><a href='Javascript:Void(0)'  onclick='pagina(\"Catálogo de Brinquedos\")'> Catálogo de Brinquedos</a></b> -> <b><a href='Javascript:Void(0)'  onclick='abreCategoria(\"" + ca.categoria + "\")'> " + ca.categoria + "</a></b>  </address>");
 
-            if (b.size() > 0) {
+            Database c = new Database();
+            ArrayList<BrinquedoMOD> cat = c.select(ca);
 
-                for (BrinquedoMOD dados : b) {
-                    out.println("<div class=\"col-sm-4 col-sm-offset-1\" style=\"box-shadow: 2px 2px 2px #d1d1d1;border-radius:5px;padding:10px;cursor:pointer\" onclick=\"abreBrinquedoHome('" + dados.codigo + "')\">"
+            if (cat.size() > 0) {
+
+                for (BrinquedoMOD dados : cat) {
+                    out.println("<div class=\"col-sm-4 col-sm-offset-1\" style=\"box-shadow: 2px 2px 2px #d1d1d1;border-radius:5px;padding:10px;cursor:pointer\" onclick=\"abreBrinquedo('" + dados.codigo + "')\">"
                             + "<center>");
                     out.println("<img class='img-reponsive img-circle' width='200' height='200' src=\"" + dados.imagem + "\">");
                     out.println("<h3 style=\"color:red\">" + dados.descricao + "</h3>");
@@ -67,8 +66,6 @@ public class Home extends HttpServlet {
                 }
 
             }
-
-            out.close();
 
         }
     }
