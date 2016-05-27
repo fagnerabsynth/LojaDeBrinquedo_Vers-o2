@@ -19,11 +19,13 @@ CREATE USER 'projetoalmir'@'localhost' IDENTIFIED BY '123456';
 GRANT ALL PRIVILEGES ON `projetoalmir` . * TO 'projetoalmir'@'localhost' WITH GRANT OPTION ;
 FLUSH PRIVILEGES;
 </pre>
-
-
+<br />
+<pre>
+Alunos:
 "Ricardo Fagner Castelo Branco" - RGM 14026201
 "Leandro Silva de Oliveira" - RGM 15738558
 "Gabriel Pires da Silva" - RGM 14037114
 "Renan Ribeiro Pereira" - RGM 14022133
 "Kelwin Miranda" - RGM 14020670
 "Eduardo de Souza Santos" - RGM 14019302
+</pre>
