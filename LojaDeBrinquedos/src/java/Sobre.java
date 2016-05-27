@@ -78,7 +78,12 @@ public class Sobre extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             out.println("<address>Você esta em: <b><a href='Javascript:Void(0)'  onclick='pagina(\"" + request.getServletPath().replace('/', ' ') + "\")'>" + request.getServletPath().replace('/', ' ') + "</a></b> </address>");
             Collections.shuffle(alunos);
+            int con = 0;
             for (AlunosMOD aluno : alunos) {
+                if (con==0){
+                out.println("<div class=\"row\">");    
+                }
+                con++;
                 out.println("<div class=\"col-sm-4 col-sm-offset-1\" style=\"box-shadow: 2px 2px 2px #d1d1d1;border-radius:5px;padding:10px;\" >"
                         + "<center>");
                 out.println("<img class='img-reponsive img-circle' width='200' height='200' src=\"imagens/" + aluno.foto + "\">");
@@ -87,6 +92,10 @@ public class Sobre extends HttpServlet {
                 out.println("</center>"
                         + "</div>");
 
+                if (con==2) {
+                    out.println("</div>");
+                    con = 0;
+                }
             }
 
         }
